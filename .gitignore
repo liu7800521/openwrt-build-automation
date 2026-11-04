@@ -1,0 +1,9 @@
+# 构建产物（由工作流生成，不入库）
+bin/
+custom/
+*.img.gz
+*.iso
+
+# 系统/IDE
+.DS_Store
+Thumbs.db
