@@ -57,7 +57,7 @@ GitHub → 你的仓库 → **Actions** → 选择 `Build x86-64 OpenWrt (25.12.
 | `openwrt_version` | 25.12.0 ~ 25.12.6 | OpenWrt 固件版本，默认最新 **25.12.6** |
 | `profile` | 1G / 2G / 3G / 4G | 固件根文件系统大小，**推荐 1G~2G** |
 | `custom_router_ip` | `192.168.x.1` | **仅多网口生效**；单网口/旁路由请勿修改 |
-| `include_docker` | yes / no | 是否集成 Docker（官方 `luci-app-docker`） |
+| `include_docker` | yes / no | 是否集成 Docker（官方 `dockerd` + `luci-app-dockerman`） |
 | `enable_pppoe` | yes / no | 是否配置 PPPoE 拨号 |
 | `pppoe_account` / `pppoe_password` | 文本 | 启用 PPPoE 时**必填**，为空会直接报错 |
 
@@ -93,7 +93,7 @@ GitHub → 你的仓库 → **Actions** → 选择 `Build x86-64 OpenWrt (25.12.
 | 版本 | ImmortalWrt 25.12.x | OpenWrt 25.12.x（最新 25.12.6） |
 | 初始化 | 镜像内已含 ImageBuilder | 24.10+ 镜像需先 `setup.sh` 下载 |
 | 包集合 | ImmortalWrt 私有包 + wukongdaily 第三方 | 仅 OpenWrt 官方源包 |
-| Docker | `luci-app-dockerman` | 官方 `luci-app-docker` |
+| Docker | `luci-app-dockerman` | 官方 `dockerd` + `luci-app-dockerman` |
 
 ## 七、关联项目
 

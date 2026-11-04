@@ -33,7 +33,7 @@ on:
         required: true
         default: "192.168.100.1"
       include_docker:
-        description: "是否集成 Docker（luci-app-docker）"
+        description: "是否集成 Docker（dockerd + luci-app-dockerman）"
         required: true
         default: "yes"
         type: choice

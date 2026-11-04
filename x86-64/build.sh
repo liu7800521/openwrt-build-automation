@@ -32,9 +32,9 @@ PACKAGES="$PACKAGES luci-i18n-firewall-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
 PACKAGES="$PACKAGES openssh-sftp-server"
 
-# ---- 3. Docker 可选集成（官方 luci-app-docker）----
+# ---- 3. Docker 可选集成（官方源：dockerd + luci-app-dockerman）----
 if [ "$INCLUDE_DOCKER" = "yes" ]; then
-  PACKAGES="$PACKAGES luci-app-docker luci-i18n-docker-zh-cn"
+  PACKAGES="$PACKAGES dockerd docker luci-app-dockerman luci-i18n-dockerman-zh-cn"
   echo "✅ 集成 Docker" | tee -a "$LOGFILE"
 fi
 
