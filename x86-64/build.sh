@@ -11,8 +11,8 @@ cd /builder || exit 1
 
 # ---- 0. 24.10+ 官方镜像不含实际二进制，先 setup 下载 ImageBuilder ----
 if [ ! -d ./scripts ]; then
-  echo "运行 setup.sh 下载 ImageBuilder ..." | tee -a "$LOGFILE"
-  bash ./setup.sh
+  echo "运行 setup.sh 下载 ImageBuilder（中科大镜像源）..." | tee -a "$LOGFILE"
+  UPSTREAM_URL="https://mirrors.ustc.edu.cn/openwrt" bash ./setup.sh
 fi
 
 # ---- 1. 生成 PPPoE 配置（供首次启动脚本 99-custom.sh 读取）----
@@ -38,9 +38,12 @@ if [ "$INCLUDE_DOCKER" = "yes" ]; then
   echo "✅ 集成 Docker" | tee -a "$LOGFILE"
 fi
 
-# ---- 4. 执行打包 ----
-echo "开始 make image (ROOTFS_PARTSIZE=$PROFILE) ..." | tee -a "$LOGFILE"
-make image PROFILE="generic" PACKAGES="$PACKAGES" FILES="/builder/files" ROOTFS_PARTSIZE=$PROFILE
+# ---- 4. 执行打包（软件源切到中科大镜像）----
+OPENWRT_VERSION="${OPENWRT_VERSION:-25.12.6}"
+VERSION_REPO="https://mirrors.ustc.edu.cn/openwrt/releases/${OPENWRT_VERSION}"
+echo "开始 make image (ROOTFS_PARTSIZE=$PROFILE, 软件源=$VERSION_REPO) ..." | tee -a "$LOGFILE"
+make image PROFILE="generic" PACKAGES="$PACKAGES" FILES="/builder/files" ROOTFS_PARTSIZE=$PROFILE \
+  VERSION_REPO="$VERSION_REPO" VERSION_FIRMWARE_URL="https://mirrors.ustc.edu.cn/openwrt/"
 if [ $? -ne 0 ]; then
   echo "❌ 构建失败！" | tee -a "$LOGFILE"
   exit 1

@@ -94,6 +94,7 @@ GitHub → 你的仓库 → **Actions** → 选择 `Build x86-64 OpenWrt (25.12.
 | 初始化 | 镜像内已含 ImageBuilder | 24.10+ 镜像需先 `setup.sh` 下载 |
 | 包集合 | ImmortalWrt 私有包 + wukongdaily 第三方 | 仅 OpenWrt 官方源包 |
 | Docker | `luci-app-dockerman` | 官方 `dockerd` + `luci-app-dockerman` |
+| 软件源 | `downloads.openwrt.org` | `mirrors.ustc.edu.cn/openwrt`（中科大镜像，国内快） |
 
 ## 七、关联项目
 
