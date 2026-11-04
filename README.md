@@ -40,7 +40,7 @@ GitHub → 你的仓库 → **Actions** → 选择 `Build x86-64 OpenWrt (25.12.
 
 ### 3. 获取产物
 构建完成后到仓库 **Releases** 下载：
-- 固件工作流：`*.squashfs-combined-efi.img.gz`
+- 固件工作流：`*.ext4-combined-efi.img.gz`
 - ISO 工作流：`custom-installer-x86_64.iso`
 
 ### 4. 安装

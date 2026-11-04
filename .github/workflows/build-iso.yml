@@ -105,7 +105,7 @@ jobs:
 
       - name: 复制固件到根目录
         run: |
-          cp "${{ github.workspace }}"/bin/targets/x86/64/*squashfs-combined-efi.img.gz "${{ github.workspace }}"/
+          cp "${{ github.workspace }}"/bin/targets/x86/64/*ext4-combined-efi.img.gz "${{ github.workspace }}"/
 
       - name: 上传固件 artifact（供 ISO 封装）
         uses: actions/upload-artifact@v6
@@ -132,7 +132,7 @@ jobs:
 
       - name: 制作 ISO
         run: |
-          firmware_file=$(ls *squashfs-combined-efi.img.gz)
+          firmware_file=$(ls *ext4-combined-efi.img.gz)
           cd img-installer
           bash autobuild/autobuild.sh "../$firmware_file"
 
