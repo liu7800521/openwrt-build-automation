@@ -1,19 +1,23 @@
-name: Build x86-64 ImmortalWrt (25.12.x)
+name: Build x86-64 OpenWrt (25.12.x)
 
 # 云端 ImageBuilder 打包（非源码编译）
 # 用法：Fork/推送本仓库到 GitHub → Actions → Run workflow → 填参数 → 构建并发布到 Release
 on:
   workflow_dispatch:
     inputs:
-      luci_version:
-        description: "选择 luci / 固件版本"
+      openwrt_version:
+        description: "选择 OpenWrt 固件版本"
         required: false
-        default: "25.12.1"
+        default: "25.12.6"
         type: choice
         options:
           - 25.12.0
           - 25.12.1
           - 25.12.2
+          - 25.12.3
+          - 25.12.4
+          - 25.12.5
+          - 25.12.6
       profile:
         description: "根文件系统大小（固件空间）"
         required: true
@@ -29,18 +33,13 @@ on:
         required: true
         default: "192.168.100.1"
       include_docker:
-        description: "是否集成 Docker（luci-app-dockerman）"
+        description: "是否集成 Docker（luci-app-docker）"
         required: true
         default: "yes"
         type: choice
         options:
           - "yes"
           - "no"
-      enable_store:
-        description: "是否集成 Store 商店（luci-app-store）"
-        required: false
-        type: boolean
-        default: false
       enable_pppoe:
         description: "是否配置 PPPoE 拨号（启用则必须填写账号密码）"
         required: true
@@ -81,15 +80,6 @@ jobs:
             fi
           fi
 
-      - name: 集成 Store 商店（可选）
-        run: |
-          if [ "${{ github.event.inputs.enable_store }}" == "true" ]; then
-            echo 'CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-store"' >> shell/custom-packages.sh
-            echo "已追加 luci-app-store"
-          else
-            echo "未启用 store"
-          fi
-
       - name: 云端 ImageBuilder 构建
         run: |
           profile="${{ github.event.inputs.profile }}"
@@ -100,21 +90,22 @@ jobs:
             4G) ROOTFS_SIZE=4096 ;;
           esac
           echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> "$GITHUB_ENV"
+          mkdir -p "${{ github.workspace }}/bin" "${{ github.workspace }}/dl"
           chmod +x "${{ github.workspace }}/x86-64/build.sh"
           docker run --rm -i \
             --user root \
-            -v "${{ github.workspace }}/bin:/home/build/immortalwrt/bin" \
-            -v "${{ github.workspace }}/files:/home/build/immortalwrt/files" \
-            -v "${{ github.workspace }}/custom:/home/build/immortalwrt/files/etc/config" \
-            -v "${{ github.workspace }}/shell:/home/build/immortalwrt/shell" \
-            -v "${{ github.workspace }}/x86-64/build.sh:/home/build/immortalwrt/build.sh" \
+            -v "${{ github.workspace }}/bin:/builder/bin" \
+            -v "${{ github.workspace }}/dl:/builder/dl" \
+            -v "${{ github.workspace }}/files:/builder/files" \
+            -v "${{ github.workspace }}/custom:/builder/files/etc/config" \
+            -v "${{ github.workspace }}/x86-64/build.sh:/builder/build.sh" \
             -e PROFILE="$ROOTFS_SIZE" \
             -e INCLUDE_DOCKER="${{ inputs.include_docker }}" \
             -e ENABLE_PPPOE="${{ inputs.enable_pppoe }}" \
             -e PPPOE_ACCOUNT="${{ inputs.pppoe_account }}" \
             -e PPPOE_PASSWORD="${{ inputs.pppoe_password }}" \
-            immortalwrt/imagebuilder:x86-64-openwrt-${{ github.event.inputs.luci_version }} \
-            /bin/bash /home/build/immortalwrt/build.sh
+            openwrt/imagebuilder:x86-64-${{ github.event.inputs.openwrt_version }} \
+            /bin/bash /builder/build.sh
 
       - name: 生成发布信息
         run: |
@@ -123,8 +114,8 @@ jobs:
           - 后台地址: ${{ github.event.inputs.custom_router_ip }}
           - 用户名: root
           - 密码: 无
+          - OpenWrt 版本: ${{ github.event.inputs.openwrt_version }}
           - 集成 Docker: ${{ github.event.inputs.include_docker }}
-          - Store 商店: ${{ github.event.inputs.enable_store }}
           - PPPoE: ${{ github.event.inputs.enable_pppoe }}
           EOF
 

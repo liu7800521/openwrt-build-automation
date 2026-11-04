@@ -7,3 +7,6 @@ custom/
 # 系统/IDE
 .DS_Store
 Thumbs.db
+
+dl/
+
