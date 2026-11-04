@@ -74,7 +74,7 @@ elif [ "$count" -gt 1 ]; then
     done
   fi
 
-  # LAN 静态 IP（优先用户设置，否则默认 192.168.100.1）
+  # LAN 静态 IP（优先用户设置，否则默认 192.168.31.5）
   uci set network.lan.proto='static'
   uci set network.lan.netmask='255.255.255.0'
   IP_VALUE_FILE="/etc/config/custom_router_ip.txt"
@@ -83,7 +83,7 @@ elif [ "$count" -gt 1 ]; then
     uci set network.lan.ipaddr="$CUSTOM_IP"
     echo "custom router ip: $CUSTOM_IP" >> "$LOGFILE"
   else
-    uci set network.lan.ipaddr='192.168.100.1'
+    uci set network.lan.ipaddr='192.168.31.5'
   fi
 
   # PPPoE 拨号（可选）
